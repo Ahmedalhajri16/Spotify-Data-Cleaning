@@ -30,10 +30,10 @@ The dataset contains information about Spotify tracks, including:
 SELECT *
 FROM dbo.spotify_tracks
 WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
-```
 -- Remove rows where critical columns are NULL
 DELETE FROM dbo.spotify_tracks
 WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
+```
 **Objective:** Identify and remove rows where essential columns like `track_name`, `artist_name`, or `duration_ms` contain NULL values, ensuring that only complete records are retained.
 
 ### **2. Duplicate Detection and Removal**
