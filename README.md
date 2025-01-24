@@ -1,49 +1,61 @@
-# Data Quality and Cleaning Scripts for Spotify Tracks Dataset
+# **Spotify Data Quality and Clean-Up Analysis**
 
-This repository contains SQL scripts to clean and preprocess data in the `dbo.spotify_tracks` table. These scripts are designed to handle common data quality issues such as missing values, duplicates, invalid data, and inconsistencies across various columns.
+## **Introduction**
+This project focuses on the data cleaning and quality assurance process for the Spotify Tracks dataset using SQL queries. The primary objective is to identify and remove data inconsistencies, handle duplicates, fix invalid or missing values, and standardize the data for further analysis. The dataset includes crucial details about tracks, artists, albums, and various audio features.
 
-## Overview
+This repository contains SQL scripts aimed at improving the integrity of the dataset through data cleaning tasks.
 
-The main tasks covered by the scripts are:
+---
 
-1. **Identify and Remove Rows with NULL Values**:  
-   Identify and remove rows where critical columns like `track_name`, `artist_name`, or `duration_ms` are `NULL`.
+## **Dataset Overview**
+The dataset contains information about Spotify tracks, including:
+- 🎵 **Track Name**
+- 🎤 **Artist Name**
+- 💿 **Album Name**
+- 🌐 **Language**
+- ⭐ **Popularity**
+- ⏳ **Duration (ms)**
+- 📅 **Year**
+- 🎼 **Audio Features** (e.g., tempo, loudness, instrumentalness)
+- 🎶 **URLs** (e.g., track_url, artwork_url)
+- 🔑 **Key and Mode Values**
 
-2. **Handle Duplicates**:  
-   Detect duplicate records based on a combination of essential columns (`track_name`, `artist_name`, `duration_ms`) and remove all but the first occurrence.
+---
 
-3. **Check and Handle Invalid Numeric Data**:  
-   Find rows where numeric columns like `duration_ms` or `loudness` contain invalid values (non-numeric) and correct or remove them.
+## **Queries and Insights**
 
-4. **Update and Standardize Text Data**:  
-   Convert text fields (like `track_name` and `artist_name`) to proper case or uppercase for consistency.
+### **1. NULL Values and Critical Column Checks**
+```sql
+-- Identify rows with NULL values in essential columns
+SELECT *
+FROM dbo.spotify_tracks
+WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
 
-5. **Validate and Correct Language Codes**:  
-   Identify unexpected or invalid language codes in the `language` column and replace them with a default value (`'Unknown'`), or correct them based on a predefined list of valid languages.
-
-6. **Handle Unusual Track Durations**:  
-   Identify tracks with unusually short or long durations (less than 30 seconds or greater than 10 minutes) and remove or update these outliers.
-
-7. **Validate Popularity Values**:  
-   Check for invalid popularity values (outside the range of 0 to 100) and remove or update them.
-
-8. **Trim Leading/Trailing Spaces**:  
-   Remove leading and trailing spaces from text columns like `track_name`, `artist_name`, and `album_name`.
-
-9. **Validate Key and Mode Values**:  
-   Ensure the `key` and `mode` columns contain valid values and correct or remove any invalid entries.
-
-10. **Replace Missing Popularity and Duration Values**:  
-    Replace missing popularity values with 0 and missing `duration_ms` values with the average duration of all tracks in the dataset.
-
-11. **Handle Invalid URLs**:  
-    Identify rows where the `track_url` or `artwork_url` columns contain invalid URLs and remove or correct them.
-
-## SQL Scripts
-
-### 1. Identify and Remove Rows with NULL Values
+-- Remove rows where critical columns are NULL
+DELETE FROM dbo.spotify_tracks
+WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
+**Objective:** Identify and remove rows where essential columns like `track_name`, `artist_name`, or `duration_ms` contain NULL values, ensuring that only complete records are retained.
+### 2. Duplicate Detection and Removal
 
 ```sql
-SELECT * 
-FROM dbo.spotify_tracks 
-WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
+-- Identify duplicate records
+SELECT 
+    track_name, 
+    artist_name, 
+    duration_ms, 
+    COUNT(*) AS duplicate_count
+FROM dbo.spotify_tracks
+GROUP BY track_name, artist_name, duration_ms
+HAVING COUNT(*) > 1;
+
+-- Remove duplicates, keeping the first occurrence
+WITH CTE AS (
+    SELECT 
+        *, 
+        ROW_NUMBER() OVER (PARTITION BY track_name, artist_name, duration_ms ORDER BY track_id) AS row_num
+    FROM dbo.spotify_tracks
+)
+DELETE FROM CTE
+WHERE row_num > 1;
+**Objective:** Identify and remove duplicate records, keeping only the first occurrence of each duplicate track. This step ensures that the dataset does not contain multiple entries for the same song.
+
