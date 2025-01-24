@@ -25,8 +25,8 @@ The dataset contains information about Spotify tracks, including:
 ## **Queries and Insights**
 
 ### **1. NULL Values and Critical Column Checks**
-```sql
--- Identify rows with NULL values in essential columns
+sql
+Identify rows with NULL values in essential columns
 SELECT *
 FROM dbo.spotify_tracks
 WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
