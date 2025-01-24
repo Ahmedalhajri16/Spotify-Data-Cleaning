@@ -25,18 +25,19 @@ The dataset contains information about Spotify tracks, including:
 ## **Queries and Insights**
 
 ### **1. NULL Values and Critical Column Checks**
-sql
-Identify rows with NULL values in essential columns
+```sql
+--Identify rows with NULL values in essential columns
 SELECT *
 FROM dbo.spotify_tracks
 WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
-
+```
 -- Remove rows where critical columns are NULL
 DELETE FROM dbo.spotify_tracks
 WHERE track_name IS NULL OR artist_name IS NULL OR duration_ms IS NULL;
 **Objective:** Identify and remove rows where essential columns like `track_name`, `artist_name`, or `duration_ms` contain NULL values, ensuring that only complete records are retained.
 
 ### **2. Duplicate Detection and Removal**
+```sql
 -- Identify duplicate records
 SELECT 
     track_name, 
@@ -56,6 +57,7 @@ WITH CTE AS (
 )
 DELETE FROM CTE
 WHERE row_num > 1;
+```
 **Objective:** Identify and remove duplicate records, keeping only the first occurrence of each duplicate track. This step ensures that the dataset does not contain multiple entries for the same song.
 
 
