@@ -133,6 +133,7 @@ UPDATE dbo.spotify_tracks
 SET track_name = LTRIM(RTRIM(track_name)),
     artist_name = LTRIM(RTRIM(artist_name)),
     album_name = LTRIM(RTRIM(album_name));
+```
 ### Objective: 
 Remove any leading or trailing spaces in the text fields (e.g., track_name, artist_name, album_name) to improve consistency.
 
