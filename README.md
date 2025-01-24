@@ -57,5 +57,6 @@ WITH CTE AS (
 )
 DELETE FROM CTE
 WHERE row_num > 1;
-**Objective:** Identify and remove duplicate records, keeping only the first occurrence of each duplicate track. This step ensures that the dataset does not contain multiple entries for the same song.
+**Objective:** Identify and remove duplicate records, keeping only the first occurrence of each duplicate track.
+ This step ensures that the dataset does not contain multiple entries for the same song.
 
