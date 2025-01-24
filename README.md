@@ -144,7 +144,7 @@ Remove any leading or trailing spaces in the text fields (e.g., track_name, arti
 SELECT *
 FROM dbo.spotify_tracks
 WHERE [key] NOT BETWEEN 0 AND 11 OR mode NOT IN (0, 1);
-```
+
 -- Correct or remove invalid values
 UPDATE dbo.spotify_tracks
 SET [key] = NULL
@@ -153,6 +153,7 @@ WHERE [key] NOT BETWEEN 0 AND 11;
 UPDATE dbo.spotify_tracks
 SET mode = NULL
 WHERE mode NOT IN (0, 1);
+```
 ### Objective: 
 Identify and correct invalid key and mode values, ensuring they fall within the acceptable range.
 ### 10. Handling Missing and Out-of-Range Data
